@@ -3,7 +3,6 @@ import time
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 import pandas as pd
-import numpy as np
 from ta.trend import SMAIndicator, EMAIndicator
 from ta.momentum import RSIIndicator
 from ta.volatility import BollingerBands
@@ -13,14 +12,13 @@ from smolagents import Tool
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from rich import print as rprint
-from rich.pretty import pprint
 
 # Initialize rich console
 console = Console()
 
 BINANCE_FUTURES_BASE_URL = "https://fapi.binance.com"
 hyperliquid_api_endpoint = "https://api.hyperliquid.xyz/info"
+
 
 def pretty_print_kline_data(df: pd.DataFrame, last_n: int = 5) -> None:
     """Pretty print the last n rows of kline data."""
@@ -35,6 +33,7 @@ def pretty_print_kline_data(df: pd.DataFrame, last_n: int = 5) -> None:
         table.add_row(*[str(val) for val in row])
 
     console.print(table)
+
 
 def pretty_print_technical_analysis(results: Dict[str, Any]) -> None:
     """Pretty print technical analysis results."""
@@ -111,6 +110,7 @@ def pretty_print_technical_analysis(results: Dict[str, Any]) -> None:
         price_table.add_row(k, f"{v:.2f}")
     console.print(price_table)
 
+
 def fetch_kline_data_binance(
     symbol: str,
     interval: str,
@@ -177,6 +177,7 @@ def fetch_kline_data_binance(
         error_msg = f"Failed to fetch kline data: {str(e)}\nResponse: {response.text if 'response' in locals() else 'No response'}"
         console.print(f"[red bold]{error_msg}[/red bold]")
         raise Exception(error_msg)
+
 
 def fetch_kline_data_hyperliquid(
     symbol: str,
@@ -277,9 +278,11 @@ def fetch_kline_data_hyperliquid(
         console.print(f"[red bold]{error_msg}[/red bold]")
         raise Exception(error_msg)
 
+
 def prepare_kline_data_hyperliquid(kline_data: List[List]) -> pd.DataFrame:
     """Convert kline data to pandas DataFrame with proper column names."""
     pass
+
 
 def interval_to_milliseconds(interval: str) -> int:
     """Convert interval string to milliseconds."""
@@ -342,13 +345,12 @@ def prepare_kline_data_binance(kline_data: List[List]) -> pd.DataFrame:
 
 
 # Support and Resistance
-def calculate_support_resistance(
-    data: pd.DataFrame, periods: int = 20
-) -> tuple:
+def calculate_support_resistance(data: pd.DataFrame, periods: int = 20) -> tuple:
     recent_data = data.tail(periods)
     support = recent_data["low"].min()
     resistance = recent_data["high"].max()
     return support, resistance
+
 
 class AnalyzeTechnicalIndicatorsTool(Tool):
     """
