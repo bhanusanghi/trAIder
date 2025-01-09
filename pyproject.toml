@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "trAIder"
+version = "0.1.0"
+description = "A trading quant analyst agent written with Hugging face's SMOL code agents"
+authors = ["bhanusanghi <bhanussanghi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.1.0"
+numpy = "^1.24.0"
+ta = "^0.10.2"
+pandas-ta = "^0.3.14b"
+requests = "^2.31.0"
+smolagents = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
