@@ -1,4 +1,4 @@
-from analyst.keywant import process_request
+from analyst.trAIder import process_request
 from typing import Optional
 
 

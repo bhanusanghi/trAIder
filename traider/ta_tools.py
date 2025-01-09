@@ -20,7 +20,7 @@ from rich.pretty import pprint
 console = Console()
 
 BINANCE_FUTURES_BASE_URL = "https://fapi.binance.com"
-
+hyperliquid_api_endpoint = "https://api.hyperliquid.xyz/info"
 
 def pretty_print_kline_data(df: pd.DataFrame, last_n: int = 5) -> None:
     """Pretty print the last n rows of kline data."""
@@ -35,7 +35,6 @@ def pretty_print_kline_data(df: pd.DataFrame, last_n: int = 5) -> None:
         table.add_row(*[str(val) for val in row])
 
     console.print(table)
-
 
 def pretty_print_technical_analysis(results: Dict[str, Any]) -> None:
     """Pretty print technical analysis results."""
@@ -112,7 +111,6 @@ def pretty_print_technical_analysis(results: Dict[str, Any]) -> None:
         price_table.add_row(k, f"{v:.2f}")
     console.print(price_table)
 
-
 def fetch_kline_data_binance(
     symbol: str,
     interval: str,
@@ -180,7 +178,6 @@ def fetch_kline_data_binance(
         console.print(f"[red bold]{error_msg}[/red bold]")
         raise Exception(error_msg)
 
-
 def fetch_kline_data_hyperliquid(
     symbol: str,
     interval: str,
@@ -213,7 +210,6 @@ def fetch_kline_data_hyperliquid(
             ...
         ]
     """
-    endpoint = "https://api.hyperliquid.xyz/info"
 
     console.print(
         f"[bold blue]Fetching Hyperliquid kline data for {symbol} on {interval} timeframe[/bold blue]"
@@ -244,10 +240,10 @@ def fetch_kline_data_hyperliquid(
     }
 
     try:
-        console.print(f"[dim]Request URL: {endpoint}[/dim]")
+        console.print(f"[dim]Request URL: {hyperliquid_api_endpoint}[/dim]")
         console.print(f"[dim]Payload: {payload}[/dim]")
 
-        response = requests.post(endpoint, json=payload, timeout=10)
+        response = requests.post(hyperliquid_api_endpoint, json=payload, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -281,6 +277,9 @@ def fetch_kline_data_hyperliquid(
         console.print(f"[red bold]{error_msg}[/red bold]")
         raise Exception(error_msg)
 
+def prepare_kline_data_hyperliquid(kline_data: List[List]) -> pd.DataFrame:
+    """Convert kline data to pandas DataFrame with proper column names."""
+    pass
 
 def interval_to_milliseconds(interval: str) -> int:
     """Convert interval string to milliseconds."""
@@ -301,7 +300,7 @@ def interval_to_milliseconds(interval: str) -> int:
         raise ValueError(f"Invalid interval unit: {unit}")
 
 
-def prepare_kline_data(kline_data: List[List]) -> pd.DataFrame:
+def prepare_kline_data_binance(kline_data: List[List]) -> pd.DataFrame:
     """Convert kline data to pandas DataFrame with proper column names."""
     try:
         console.print("[bold blue]Preparing kline data...[/bold blue]")
@@ -341,6 +340,15 @@ def prepare_kline_data(kline_data: List[List]) -> pd.DataFrame:
         console.print(f"[red bold]{error_msg}[/red bold]")
         raise Exception(error_msg)
 
+
+# Support and Resistance
+def calculate_support_resistance(
+    data: pd.DataFrame, periods: int = 20
+) -> tuple:
+    recent_data = data.tail(periods)
+    support = recent_data["low"].min()
+    resistance = recent_data["high"].max()
+    return support, resistance
 
 class AnalyzeTechnicalIndicatorsTool(Tool):
     """
@@ -512,7 +520,7 @@ class AnalyzeTechnicalIndicatorsTool(Tool):
             end_time=end_time,
             limit=1500,
         )
-        df = prepare_kline_data(kline_data)
+        df = prepare_kline_data_binance(kline_data)
 
         console.print("[bold blue]Calculating technical indicators...[/bold blue]")
 
@@ -645,15 +653,6 @@ class AnalyzeTechnicalIndicatorsTool(Tool):
                     "volume_ma": df["volume"].rolling(window=20).mean().iloc[-1],
                     "volume_std": df["volume"].rolling(window=20).std().iloc[-1],
                 }
-
-                # Support and Resistance
-                def calculate_support_resistance(
-                    data: pd.DataFrame, periods: int = 20
-                ) -> tuple:
-                    recent_data = data.tail(periods)
-                    support = recent_data["low"].min()
-                    resistance = recent_data["high"].max()
-                    return support, resistance
 
             support, resistance = calculate_support_resistance(
                 df, config["support_resistance_periods"]

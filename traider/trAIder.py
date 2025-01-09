@@ -123,7 +123,7 @@ def log_event(
 
 def process_request(
     ticker: str, timeframe: str, extra_query: Optional[str] = None
-) -> Dict[str, Any]:
+) -> str:
     """
     Process a trading analysis request.
 
