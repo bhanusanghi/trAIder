@@ -14,8 +14,8 @@ from smolagents import (
 from rich.console import Console
 from rich.panel import Panel
 from rich.traceback import install
-from analyst.ta_tools import AnalyzeTechnicalIndicatorsTool
-from analyst.prompts import TRADING_EXPERT_AGENT_SYSTEM_PROMPT, AGENT_TASK_PROMPT
+from trAIder.ta_tools import AnalyzeTechnicalIndicatorsTool
+from trAIder.prompts import TRADING_EXPERT_AGENT_SYSTEM_PROMPT, AGENT_TASK_PROMPT
 
 # Install rich traceback handler
 install(show_locals=True)
@@ -160,8 +160,9 @@ def process_request(
     print("using openrouter model, api key:", api_key)
     # Initialize model
     model = LiteLLMModel(
-        model_id="openrouter/google/gemini-2.0-flash-thinking-exp:free",
+        # model_id="openrouter/deepseek/deepseek-r1",
         # model_id="openrouter/deepseek/deepseek-chat",
+        model_id="openrouter/microsoft/phi-4",
         api_base="https://openrouter.ai/api/v1",
         api_key=api_key,
     )

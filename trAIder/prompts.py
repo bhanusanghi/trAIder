@@ -66,8 +66,8 @@ USER QUESTION: Analyze the technical indicators for {symbol}. I want to trade in
 
 TASK REQUIREMENTS:
 
+You are an expert in finding the right timeframes and technical indicator configurations, especially for Bollinger Bands, MACD and RSI. Each timeframe will have different configurations which are used by top analysts and traders based on the timeframe window.
 0. Fetch relevant multiple timeframes for the user's question, for each timeframe call the analyze technical indicators tool to get the technical indicators
-You are an expert in finding the right timeframes and technical indicator configurations. Each timeframe will have different configurations which are used by top analysts and traders.
 
 This function takes in the following inputs which you will pass to the tool for each timeframe.
 You can ignore and move forward if a few timeframe datas are not available.

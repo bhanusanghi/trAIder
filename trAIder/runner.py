@@ -1,4 +1,4 @@
-from analyst.trAIder import process_request
+from traider import process_request
 from typing import Optional
 
 
