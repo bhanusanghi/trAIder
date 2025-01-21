@@ -69,8 +69,20 @@ poetry install
 
 ## Usage
 
+1. To run the analysis, simply update the ticker, timeframe and query in the runner.py file
+2. Navigate to root directory in your terminal of choice.
+3. Start Poetry shell (python virtual environment) with
+```bash
+poetry shell
+```
+4. Run the analysis with
+```bash
+python ./trAIder/runner.py 
+```
+
+Example: 
 ```python
-from analyst.runner import run_analyst
+from trAIder.runner import run_analyst
 
 # Simple analysis
 run_analyst("BTCUSDT", "1h")
