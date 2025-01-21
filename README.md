@@ -95,6 +95,14 @@ run_analyst(
 )
 ```
 
+## Upcoming Features
+- Web Search for similar crypto currencies (coingecko)
+- Compare with similar crypto currencies and BTC to find relative strength
+- Compare with financial macro and crypto macro to find relative strength
+- Web Search for news and events
+- Add Market Sentiment Analysis
+- Add Historical Data Analysis
+
 ## Contributing
 
 1. Fork the repository
